@@ -1,0 +1,79 @@
+﻿<Window x:Class="MediaControll.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MediaControll"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Small Media Controller" Height="450" Width="800" Background="#FF264BBB" MinWidth="400" MinHeight="225" Icon="src/MusicIcon.png">
+    <Grid>
+        <!--#region Grid preferences-->
+        <!--Grid background is blurred preview picture of current played song-->
+        <Grid.Background>
+            <VisualBrush Viewbox="0.08,0.2,0.5,0.5">
+                <VisualBrush.Visual>
+                    <Image Source="src/SampleImage.jpg">
+                        <Image.BitmapEffect>
+                            <BlurBitmapEffect KernelType="Gaussian" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased"  Radius="20" />
+                        </Image.BitmapEffect>
+                    </Image>
+                </VisualBrush.Visual>
+            </VisualBrush>
+        </Grid.Background>
+        
+        <!--Grid row and  columns. Rows have the same height; right columns have twice the width than left ones-->
+        <!--#region Grid Definitions-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#endregion-->
+        
+        <!--Material design card containing Title and Author-->
+        <materialDesign:Card Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="5" Background="{Binding Source={x:Static SystemParameters.WindowGlassBrush}, FallbackValue='#CC000CFF'}"><!--Background="#CC000CFF"-->
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock  Style="{StaticResource Header}">Currently Playing:</TextBlock>
+                <TextBlock Style="{StaticResource Content}"  Text="{Binding CurrentlyPlaying}"/>
+                <TextBlock Style="{StaticResource Content}"  Text="{Binding InterpretOfCurrentlyPlaying}"/>
+            </StackPanel>
+        </materialDesign:Card>
+        
+        <!--Image of currently played Song-->
+        <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="{Binding Path=Thumbnail, Converter={x:Static local:ImageConverter.Instance}, Mode=TwoWay}" Margin="5"/>
+        
+        <!--#region Media control buttons (and volume slider)-->
+        <!--Icons are in Stack-Panels to extend range. Invisible color has to be set to check for mouse over in invisible areas -->
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center">
+            <Button Style="{StaticResource MediaControllButtonFrame}" Command="{Binding Path=SkipPreviousCommand}" ToolTip="SkipPrevious">
+                <materialDesign:PackIcon Style="{StaticResource MediaControllIcon}" Kind="SkipPrevious"/>
+            </Button>
+            <Button Command="{Binding Path=PlayPauseCommand}" Style="{StaticResource MediaControllButtonFrame}" ToolTip="Play/Pause">
+                <materialDesign:PackIcon >
+                    <materialDesign:PackIcon.Style>
+                        <Style TargetType="materialDesign:PackIcon" BasedOn="{StaticResource MediaControllIcon}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsCurrentlyPlaying}" Value="True">
+                                    <Setter Property="Kind" Value="Pause"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=IsCurrentlyPlaying}" Value="False">
+                                    <Setter Property="Kind" Value="Play"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:PackIcon.Style>
+                </materialDesign:PackIcon>
+            </Button>
+            <Button Style="{StaticResource MediaControllButtonFrame}" Command="{Binding Path=SkipNextCommand}" ToolTip="SkipNext">
+                <materialDesign:PackIcon Style="{StaticResource MediaControllIcon}" Kind="SkipNext"/>
+            </Button>
+        </StackPanel>
+        <Button Content="Reload" Grid.Column="1" HorizontalAlignment="Left" Margin="399.2,85.6,0,0" Grid.Row="1" VerticalAlignment="Top" Width="98" Command="{Binding Path=ReloadCommand}"/>
+        <!--#endregion-->
+    </Grid>
+</Window>
