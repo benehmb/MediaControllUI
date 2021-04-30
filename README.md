@@ -1,6 +1,7 @@
 ﻿# Small Media Control
 This Program lets you control anything that is currently playing.
-
+![Image of this program playing something](src/ExampleOfProgram.png)
+![Image of this program playing nothing](src/ExampleOfProgram2.png)
 Work in Progress. Works for Programs, which doesn't open new Sessions whenever they play a new Song like Groove-Music. Other programs like YouTube Music won't work at the moment.
 
 ## What is this program for?
